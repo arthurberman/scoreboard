@@ -21,10 +21,6 @@ function Scorebar(props: ScoreBarProps) {
     transitionDuration: "0.5s",
     color: "white"
   };
-  return (
-    <div style={{ height: "100%" }}>
-      <div style={style}>{props.score}</div>
-    </div>
-  );
+  return <div style={style}>{props.score}</div>;
 }
 export default Scorebar;
