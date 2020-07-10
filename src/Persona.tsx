@@ -1,5 +1,6 @@
 import React from "react";
 import "./Persona.css";
+import PersonaPic from "./PersonaPic";
 
 interface PersonaProps {
   name: string;
@@ -8,14 +9,7 @@ interface PersonaProps {
 function Persona(props: PersonaProps) {
   return (
     <div className="Persona">
-      <div
-        style={{
-          width: "10em",
-          height: "10em",
-          borderRadius: "20%",
-          backgroundColor: "red"
-        }}
-      />
+      <PersonaPic name={props.name} />
       <h1>{props.name}</h1>
     </div>
   );

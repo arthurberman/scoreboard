@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import "./App.css";
 import GamePane from "./GamePane";
+import Logo from "./Logo";
 
 function reducer(state: any, action: any) {
   switch (action.type) {
@@ -24,6 +25,7 @@ function RealApp() {
 
   return (
     <div className="App">
+      <Logo />
       <DispatchContext.Provider value={{ state, dispatch }}>
         <GamePane />
       </DispatchContext.Provider>
