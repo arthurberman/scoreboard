@@ -2,37 +2,47 @@ import React, { useState, MutableRefObject, useRef, useContext } from "react";
 import Contestant from "./Contestant";
 import { DispatchContext } from "./RealApp";
 
-function GamePane() {
-  const [contestants, setContestants] = useState([{ name: "Test" }]);
+function GamePane(props: { shouldShowEntry: boolean }) {
+  const previousContestants = JSON.parse(
+    window.localStorage.getItem("contestants") || "[]"
+  );
+  const [contestants, setContestants] = useState<{ name: string }[]>(
+    previousContestants
+  );
+  const { shouldShowEntry } = props;
   const buttonRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
 
   function addContestant(event: React.FormEvent) {
     event.preventDefault();
-    setContestants(
-      contestants.concat({
-        name:
-          buttonRef && buttonRef.current ? buttonRef.current.value : "No nmae"
-      })
-    );
+    const newContestants = contestants.concat({
+      name: buttonRef && buttonRef.current ? buttonRef.current.value : "No name"
+    });
+    window.localStorage.setItem("contestants", JSON.stringify(newContestants));
+    setContestants(newContestants);
   }
   const context = useContext(DispatchContext);
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div style={{ margin: "2em", display: "flex", flexDirection: "row" }}>
       <div style={{ flexGrow: 10 }}>
-        {contestants.map(contestant => {
+        {contestants.map((contestant: { name: string }) => {
           return (
             <Contestant
               name={contestant.name}
               maxScore={context && context.state.highScore}
               key={contestant.name}
+              restorationKey={contestant.name}
             />
           );
         })}
       </div>
-      <form onSubmit={addContestant}>
-        <input ref={buttonRef} />
-        <button onClick={addContestant}>+</button>
-      </form>
+      {shouldShowEntry ? (
+        <form onSubmit={addContestant}>
+          <input ref={buttonRef} />
+          <button onClick={addContestant}>+</button>
+        </form>
+      ) : (
+        undefined
+      )}
     </div>
   );
 }

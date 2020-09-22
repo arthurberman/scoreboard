@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import "./App.css";
 import GamePane from "./GamePane";
 import Logo from "./Logo";
@@ -7,6 +7,7 @@ function reducer(state: any, action: any) {
   switch (action.type) {
     case "scoreChange":
       if (action.payload.score > state.highScore) {
+        window.localStorage.setItem("highScore", action.payload.score);
         return { highScore: action.payload.score };
       }
       return state;
@@ -21,14 +22,33 @@ export const DispatchContext = React.createContext<{
 } | null>(null);
 
 function RealApp() {
-  const [state, dispatch] = useReducer(reducer, { highScore: 1 });
+  const previousHighScore = window.localStorage.getItem("highScore") || 1;
+  const [state, dispatch] = useReducer(reducer, {
+    highScore: previousHighScore
+  });
+
+  const [shouldShowEntry, setShouldShowEntry] = useState<boolean>(false);
+
+  function Reset() {
+    window.localStorage.clear();
+    window.location.reload();
+  }
 
   return (
     <div className="App">
-      <Logo />
       <DispatchContext.Provider value={{ state, dispatch }}>
-        <GamePane />
+        <GamePane shouldShowEntry={shouldShowEntry} />
       </DispatchContext.Provider>
+      <br />
+      <br />
+      <button onClick={Reset}> Reset </button>
+      <button
+        onClick={() => {
+          setShouldShowEntry(!shouldShowEntry);
+        }}
+      >
+        Show Entry Field
+      </button>
     </div>
   );
 }

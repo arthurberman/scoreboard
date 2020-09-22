@@ -4,15 +4,23 @@ const style: React.CSSProperties = {
   width: "10em",
   height: "10em",
   borderRadius: "20%",
-  backgroundColor: "red"
+  borderColor: "black",
+  borderStyle: "solid"
 };
 
 export interface PersonaPicProps {
   name: string;
+  restorationKey?: string;
 }
 
 function PersonaPic(props: PersonaPicProps) {
-  const [picture, setPicture] = useState<string | ArrayBuffer | null>(null);
+  let pictureKey = "logo512.png";
+  if (props.restorationKey) {
+    pictureKey =
+      window.localStorage.getItem(props.restorationKey + "PersonaPicKey") ||
+      pictureKey;
+  }
+  const [picture, setPicture] = useState<string | null>(pictureKey);
 
   function onDrop(event: React.DragEvent) {
     event.preventDefault();
@@ -28,7 +36,13 @@ function PersonaPic(props: PersonaPicProps) {
               "load",
               function() {
                 // convert image file to base64 string
-                setPicture(reader.result);
+                setPicture(reader.result as string);
+                if (props.restorationKey) {
+                  window.localStorage.setItem(
+                    props.restorationKey + "PersonaPicKey",
+                    reader.result as string
+                  );
+                }
               },
               false
             );
@@ -41,13 +55,11 @@ function PersonaPic(props: PersonaPicProps) {
     event.preventDefault();
   }
 
-  if (picture) {
-    return <img src={picture as string} style={style} alt={props.name} />;
-  }
-
   return (
-    <div
+    <img
+      src={picture as string}
       style={style}
+      alt={props.name}
       onDrop={onDrop}
       onDragOver={dragHandler}
       onDragEnter={dragHandler}

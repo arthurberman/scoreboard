@@ -8,10 +8,12 @@ interface ScoreBarProps {
 function Scorebar(props: ScoreBarProps) {
   const style: CSSProperties = {
     display: "flexbox",
+    flexDirection: "column",
+    flex: "9",
     marginTop: "3em",
     marginBottom: "3em",
     marginLeft: "1em",
-    backgroundColor: "red",
+    backgroundColor: "blue",
     width: props.width,
     paddingTop: "3em",
     paddingBottom: "3em",
@@ -19,7 +21,9 @@ function Scorebar(props: ScoreBarProps) {
     padding: "1em",
     transitionProperty: "width",
     transitionDuration: "0.5s",
-    color: "white"
+    color: "white",
+    borderStyle: "solid",
+    borderColor: "black"
   };
   return <div style={style}>{props.score}</div>;
 }

@@ -9,7 +9,7 @@ interface PersonaProps {
 function Persona(props: PersonaProps) {
   return (
     <div className="Persona">
-      <PersonaPic name={props.name} />
+      <PersonaPic name={props.name} restorationKey={props.name} />
       <h1>{props.name}</h1>
     </div>
   );

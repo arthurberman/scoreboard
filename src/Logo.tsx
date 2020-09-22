@@ -1,7 +1,7 @@
 import React from "react";
 
 function Logo() {
-  return <h1>Coooool</h1>;
+  return <img src="/unnamed.jpg" alt="Run On!" />;
 }
 
 export default Logo;
